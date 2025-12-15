@@ -1,58 +1,73 @@
 # 🛡️ API Threat Intelligence
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Flask](https://img.shields.io/badge/Flask-3.0-green)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python)
+![Flask](https://img.shields.io/badge/Flask-3.0-green?style=for-the-badge&logo=flask)
+![APIs](https://img.shields.io/badge/APIs-VirusTotal%20%7C%20AbuseIPDB-orange?style=for-the-badge)
 
-API REST avec interface web pour analyser des IPs, hash de fichiers et domaines suspects en utilisant **VirusTotal** et **AbuseIPDB**.
+API REST avec interface web pour analyser des IPs, hash de fichiers et domaines suspects en temps réel.
+
+---
 
 ## 🎯 Objectif
 
-Fournir un outil d'analyse de threat intelligence permettant de :
-- Vérifier si une IP est malveillante
-- Analyser des hash de fichiers suspects
-- Vérifier la réputation de domaines
-- Enrichir automatiquement des listes d'IOC (Indicators of Compromise)
+Créer une plateforme centralisée d'analyse de threat intelligence permettant aux analystes SOC de vérifier rapidement la réputation d'IPs, fichiers et domaines en interrogeant simultanément plusieurs sources de confiance.
+
+---
 
 ## ✨ Fonctionnalités
 
 ### 🌐 Vérification d'IPs
-- Interrogation simultanée de **VirusTotal** et **AbuseIPDB**
-- Score de malveillance agrégé
-- Informations géographiques et AS
-- Recommandations de sécurité
+- **Sources multiples :** VirusTotal + AbuseIPDB
+- **Détections :** Malware, botnet, spam, scanning
+- **Informations géo :** Pays, AS, ISP
+- **Score de confiance :** Agrégation des sources
+- **Historique :** Derniers rapports d'abus
 
-### 🔐 Analyse de Hash
-- Support MD5, SHA1, SHA256
-- Détections antivirus (VirusTotal)
-- Type et taille de fichier
-- Noms connus du fichier
+### 🔐 Analyse de Hash de Fichiers
+- **Support :** MD5, SHA1, SHA256
+- **Détections antivirus :** 70+ moteurs (VirusTotal)
+- **Métadonnées :** Type de fichier, taille, noms connus
+- **Classification :** Malware family identification
+- **Score de malveillance :** Consensus des AV
 
 ### 🌍 Vérification de Domaines
-- Réputation du domaine
-- Catégorisation
-- Détections malveillantes
-- Historique d'analyse
+- **Réputation :** Score global du domaine
+- **Catégorisation :** Type de site (malware, phishing, etc.)
+- **Détections :** Nombre de moteurs signalant le domaine
+- **WHOIS data :** Informations d'enregistrement
+- **Historique :** Activité malveillante passée
 
 ### 📊 Enrichissement d'IOC
-- Traitement par lot d'IPs, hash et domaines
-- Classification automatique du type d'IOC
-- Statistiques globales
-- Rate limiting intelligent
+- **Traitement par lot :** Analyse de listes d'IOC
+- **Auto-détection :** Classification automatique (IP/hash/domain)
+- **Statistiques :** Vue d'ensemble des menaces
+- **Export :** Résultats en JSON
+- **Rate limiting :** Respect des quotas API
 
-### 💾 Cache Local
-- Base SQLite intégrée
-- Expiration configurable (24h par défaut)
-- Réduction des appels API
-- Performance optimisée
+### 💾 Système de Cache
+- **Base SQLite :** Stockage local des résultats
+- **Expiration configurable :** 24h par défaut
+- **Performance :** Réduction du temps de réponse
+- **Économie :** Limitation des appels API payants
+
+### 🎨 Interface Web
+- **Dashboard moderne :** Design responsive
+- **4 onglets intuitifs :** IP, Hash, Domain, IOC
+- **Résultats temps réel :** Affichage dynamique
+- **Badges de statut :** Malveillant / Légitime
+- **Recommandations :** Actions suggérées
+
+---
 
 ## 🚀 Installation
 
 ### Prérequis
 - Python 3.8+
-- pip
+- Clés API (gratuites) :
+  - [VirusTotal](https://www.virustotal.com/gui/join-us)
+  - [AbuseIPDB](https://www.abuseipdb.com/register)
 
-### Installation rapide
+### Installation
 
 ```bash
 # Cloner le repository
@@ -62,50 +77,30 @@ cd Threat-Intel-API
 # Installer les dépendances
 pip install -r requirements.txt
 
-# Copier le fichier d'environnement
-copy .env.example .env
-
-# Lancer l'application
-python app.py
+# Configurer les clés API
+cp .env.example .env
+# Éditer .env avec vos clés API
 ```
 
-## 🔑 Configuration des Clés API (Optionnel)
-
-L'application fonctionne sans clés API mais avec des fonctionnalités limitées.
-
-### Obtenir des clés gratuites :
-
-1. **VirusTotal** (4 requêtes/minute)
-   - S'inscrire sur : https://www.virustotal.com/gui/join-us
-   - Récupérer la clé API dans votre profil
-
-2. **AbuseIPDB** (1000 requêtes/jour)
-   - S'inscrire sur : https://www.abuseipdb.com/register
-   - Récupérer la clé API dans les paramètres
-
-### Configurer les clés
-
-Éditer le fichier `.env` :
-
-```bash
-VIRUSTOTAL_API_KEY=votre_clé_virustotal_ici
-ABUSEIPDB_API_KEY=votre_clé_abuseipdb_ici
-```
+---
 
 ## 📖 Utilisation
 
-### Interface Web
+### Démarrer l'API
 
-Lancer le serveur :
 ```bash
 python app.py
 ```
 
-Accéder à l'interface : **http://127.0.0.1:5000**
+L'API sera accessible sur : **http://127.0.0.1:5000**
+
+### Interface Web
+
+Ouvrir dans un navigateur : http://127.0.0.1:5000
 
 ### API REST
 
-#### 1. Vérifier une IP
+#### Vérifier une IP
 
 ```bash
 curl -X POST http://127.0.0.1:5000/api/check/ip \
@@ -125,7 +120,8 @@ curl -X POST http://127.0.0.1:5000/api/check/ip \
       "source": "VirusTotal",
       "malicious": 0,
       "harmless": 89,
-      "country": "US"
+      "country": "US",
+      "as_owner": "Google LLC"
     },
     {
       "source": "AbuseIPDB",
@@ -136,7 +132,7 @@ curl -X POST http://127.0.0.1:5000/api/check/ip \
 }
 ```
 
-#### 2. Vérifier un Hash
+#### Vérifier un Hash
 
 ```bash
 curl -X POST http://127.0.0.1:5000/api/check/hash \
@@ -144,7 +140,7 @@ curl -X POST http://127.0.0.1:5000/api/check/hash \
   -d '{"hash": "44d88612fea8a8f36de82e1278abb02f"}'
 ```
 
-#### 3. Vérifier un Domaine
+#### Vérifier un Domaine
 
 ```bash
 curl -X POST http://127.0.0.1:5000/api/check/domain \
@@ -152,7 +148,7 @@ curl -X POST http://127.0.0.1:5000/api/check/domain \
   -d '{"domain": "example.com"}'
 ```
 
-#### 4. Enrichir des IOC
+#### Enrichir des IOC
 
 ```bash
 curl -X POST http://127.0.0.1:5000/api/enrich/ioc \
@@ -161,42 +157,107 @@ curl -X POST http://127.0.0.1:5000/api/enrich/ioc \
     "iocs": [
       "8.8.8.8",
       "44d88612fea8a8f36de82e1278abb02f",
-      "example.com"
+      "malicious-site.com"
     ]
   }'
 ```
 
-#### 5. Statut de l'API
+#### Statut de l'API
 
 ```bash
 curl http://127.0.0.1:5000/api/status
 ```
 
-## 📁 Structure du Projet
+---
+
+## 🛠️ Architecture
 
 ```
 Threat-Intel-API/
 ├── app.py                 # API Flask principale
 ├── config.py              # Configuration
-├── requirements.txt       # Dépendances Python
-├── .env.example           # Template variables d'environnement
-├── README.md              # Documentation
+├── requirements.txt       # Dépendances
+├── .env                   # Clés API (non versionnée)
 ├── static/
-│   ├── style.css         # Styles CSS
-│   └── script.js         # Logique JavaScript
+│   ├── style.css         # Styles interface
+│   └── script.js         # Logique front-end
 ├── templates/
 │   └── index.html        # Interface web
 └── data/
-    └── cache.db          # Cache SQLite (créé automatiquement)
+    └── cache.db          # Cache SQLite
 ```
 
-## 🛠️ Technologies Utilisées
+---
 
-- **Flask** : Framework web Python
-- **Requests** : Requêtes HTTP vers APIs externes
-- **SQLite** : Base de données cache
-- **VirusTotal API v3** : Analyse de menaces
-- **AbuseIPDB API v2** : Base de données d'IPs malveillantes
+## 📊 Cas d'Usage Réels
+
+### 🔵 Analyste SOC
+```
+Scénario : Alerte SIEM pour connexion depuis IP suspecte
+Action : Vérification rapide de l'IP via l'API
+Résultat : IP identifiée comme botnet, blocage immédiat
+Temps gagné : 5 minutes → 30 secondes
+```
+
+### 🔴 Incident Response
+```
+Scénario : Fichier suspect détecté sur poste utilisateur
+Action : Analyse du hash MD5 via l'interface
+Résultat : Malware connu détecté par 45/70 AV
+Décision : Isolation du poste et analyse forensic
+```
+
+### 🟡 Threat Hunting
+```
+Scénario : Liste de 50 IOC d'une campagne APT
+Action : Enrichissement batch via API
+Résultat : 12 IOC identifiés comme malveillants
+Action : Ajout aux règles de blocage firewall
+```
+
+---
+
+## 🎓 Ce Que J'ai Appris
+
+### Compétences Techniques
+- ✅ Développement d'**API REST** avec Flask
+- ✅ Intégration d'**APIs tierces** (VirusTotal, AbuseIPDB)
+- ✅ Gestion de **cache** avec SQLite
+- ✅ **Rate limiting** et respect des quotas
+- ✅ **Parsing JSON** et agrégation de données
+- ✅ Développement **front-end** (HTML/CSS/JS)
+- ✅ Gestion des **erreurs** et timeout
+
+### Threat Intelligence
+- ✅ Comprendre les **IOC** (Indicators of Compromise)
+- ✅ Sources de **threat intel** publiques
+- ✅ **Enrichissement** de données de sécurité
+- ✅ **Scoring** de malveillance
+- ✅ Contexte dans l'**incident response**
+
+### Défis Surmontés
+- Gestion des limitations API (quotas gratuits)
+- Optimisation du cache pour réduire les appels
+- Agrégation de scores de sources multiples
+- Gestion des timeouts et erreurs réseau
+- Interface responsive et intuitive
+
+---
+
+## 🔒 Sécurité des Clés API
+
+⚠️ **IMPORTANT : Protection des clés API**
+
+```bash
+# Ne JAMAIS commit le fichier .env
+echo ".env" >> .gitignore
+
+# Utiliser des variables d'environnement
+export VIRUSTOTAL_API_KEY="votre_clé"
+export ABUSEIPDB_API_KEY="votre_clé"
+```
+
+---
 
 ## ⚙️ Configuration Avancée
 
@@ -204,67 +265,76 @@ Threat-Intel-API/
 
 Dans `config.py` :
 ```python
-CACHE_EXPIRY_HOURS = 24  # Modifier selon vos besoins
+CACHE_EXPIRY_HOURS = 48  # 48h au lieu de 24h
 ```
 
 ### Ajuster le rate limiting
 
-Dans `config.py` :
 ```python
-MAX_REQUESTS_PER_MINUTE = 4  # Pour VirusTotal free
+MAX_REQUESTS_PER_MINUTE = 4  # Pour VirusTotal free tier
 ```
 
-## 🎯 Cas d'Usage
+---
 
-- **Analyse SOC** : Vérification rapide d'IPs suspectes
-- **Incident Response** : Analyse de hash de malwares
-- **Threat Hunting** : Enrichissement d'IOC
-- **Pentest** : Validation d'infrastructure cible
-- **Formation** : Apprentissage de threat intelligence
+## 📈 Limitations
 
-## 🔒 Sécurité
+### Sans clés API
+- Fonctionnalités limitées
+- Messages d'erreur informatifs
+- Démo de l'interface uniquement
 
-- ⚠️ **Ne jamais** commit le fichier `.env` avec vos vraies clés API
-- Utiliser HTTPS en production
-- Implémenter une authentification pour usage en production
-- Rate limiting activé pour éviter l'abus
-
-## 📊 Limitations
-
-### Sans clés API :
-- Messages d'erreur indiquant l'absence de clés
-- Démonstration de l'interface fonctionnelle
-
-### Avec clés gratuites :
-- **VirusTotal** : 4 requêtes/minute, 500/jour
+### Avec clés gratuites
+- **VirusTotal** : 4 requêtes/min, 500/jour
 - **AbuseIPDB** : 1000 requêtes/jour
-- Fonction d'enrichissement IOC limitée par le rate limiting
+- Cache recommandé pour optimisation
+
+---
 
 ## 🚀 Améliorations Futures
 
-- [ ] Support d'APIs supplémentaires (Shodan, AlienVault OTX)
-- [ ] Export des résultats (JSON, CSV, PDF)
+- [ ] Support de Shodan, AlienVault OTX
+- [ ] Export PDF des rapports
 - [ ] Dashboard de statistiques
-- [ ] Authentification utilisateur
-- [ ] API key rotation automatique
-- [ ] Webhooks pour alertes temps réel
+- [ ] Webhooks pour alertes
 - [ ] Intégration SIEM (Splunk, ELK)
+- [ ] API key rotation automatique
+- [ ] Mode multi-tenant
+- [ ] Authentification utilisateur
+
+---
+
+## 📚 Ressources
+
+- [VirusTotal API Documentation](https://developers.virustotal.com/reference)
+- [AbuseIPDB API Documentation](https://docs.abuseipdb.com/)
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [MITRE ATT&CK Framework](https://attack.mitre.org/)
+
+---
 
 ## 📧 Contact
 
 **Valérie ENAME**
 - GitHub : [@VAL-cyber-pentester](https://github.com/VAL-cyber-pentester)
 - LinkedIn : [Valérie ENAME](https://linkedin.com/in/valérie-ename-02ba7733a)
-
-
-## 🙏 Remerciements
-
-Projet créé dans le cadre d'un portfolio en cybersécurité pour démontrer :
-- Compétences en développement d'API REST
-- Intégration d'APIs tierces
-- Connaissance de la threat intelligence
-- Création d'outils professionnels réutilisables
+- Portfolio : [val-cyber-pentester.github.io](https://val-cyber-pentester.github.io/projets)
 
 ---
 
-⭐ **Si ce projet vous est utile, n'hésitez pas à lui donner une étoile !**
+## 📄 License
+
+MIT License - Usage éducatif et professionnel.
+
+---
+
+## 🙏 Remerciements
+
+Projet créé pour démontrer :
+- Capacité à développer des APIs REST
+- Compréhension de la threat intelligence
+- Intégration de services tiers
+- Création d'outils utilisables en production
+
+---
+
+⭐ **Si cet outil vous est utile dans votre travail SOC, laissez une étoile !**
